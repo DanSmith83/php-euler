@@ -1,0 +1,11 @@
+#! /usr/bin/env php
+
+<?php
+
+require 'vendor/autoload.php';
+
+$app = new \Symfony\Component\Console\Application('PHP Euler', '0.1');
+
+$app->add(new \Euler\SetupCommand);
+
+$app->run();
