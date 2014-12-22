@@ -6,6 +6,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+
+
 class SetupCommand extends Command {
 
     private $baseUrl = 'https://projecteuler.net';
@@ -30,23 +32,27 @@ class SetupCommand extends Command {
         $url     = sprintf('%s/problem=%s', $this->baseUrl, $problem);
         $crawler = $this->client->request('GET', $url);
         $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
+        $output->writeln('HEllo');
 
-        $output->writeln(count($files));
 
-        foreach ($files as $file)
+        if ($files)
         {
-            $dir = sprintf('resources/%s', $problem);
-
-            if ( ! is_dir($dir))
+            foreach ($files as $file)
             {
-                mkdir($dir, 0755, true);
-            }
+                $dir = sprintf('resources/%s', $problem);
 
-            file_put_contents (
-                $dir.DIRECTORY_SEPARATOR.$file[0],
-                file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
-            );
+                if ( ! is_dir($dir))
+                {
+                    mkdir($dir, 0755, true);
+                }
+
+                file_put_contents (
+                    $dir.DIRECTORY_SEPARATOR.$file[0],
+                    file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
+                );
+            }
         }
+
 
         if ( ! is_dir('functions'))
         {
@@ -62,7 +68,7 @@ class SetupCommand extends Command {
         {
             file_put_contents(
                 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php',
-                '<?php'
+                sprintf(file_get_contents('config/template.php'), $problem)
             );
         }
     }

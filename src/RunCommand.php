@@ -5,11 +5,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TryCommand extends Command {
+class RunCommand extends Command {
 
     public function configure()
     {
-        $this->setName('try')
+        $this->setName('run')
              ->setDescription('The problem number')
              ->addArgument('problem', InputArgument::REQUIRED);
     }
@@ -23,13 +23,12 @@ class TryCommand extends Command {
             mkdir('solutions', 0755, true);
         }
 
-        if ( ! file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
+        if (file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
         {
-
+            $output->writeln(include 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php');
         }
 
-        include 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php';
-    }
 
+    }
 
 }
