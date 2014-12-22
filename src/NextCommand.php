@@ -33,9 +33,8 @@ class NextCommand extends Command {
 
         $i = new ArrayInput(['problem' => $bits[0] + 1]);
         $o = new BufferedOutput;
-        //$output->writeln('AAA');
-        $code = $this->command->run($i, $o);
 
+        $code = $this->command->run($i, $o);
 
         if ($code == 0)
         {

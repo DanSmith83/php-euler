@@ -32,7 +32,7 @@ class SetupCommand extends Command {
         $url     = sprintf('%s/problem=%s', $this->baseUrl, $problem);
         $crawler = $this->client->request('GET', $url);
         $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
-        $output->writeln('HEllo');
+
 
 
         if ($files)
@@ -70,6 +70,8 @@ class SetupCommand extends Command {
                 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php',
                 sprintf(file_get_contents('config/template.php'), $problem)
             );
+
+            $output->writeln(sprintf('<info>Added file %s.php</info>', $problem));
         }
     }
 
