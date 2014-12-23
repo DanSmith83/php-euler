@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 
 
-class SetupCommand extends Command {
+class CreateCommand extends Command {
 
     private $baseUrl = 'https://projecteuler.net';
 
