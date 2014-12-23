@@ -34,6 +34,8 @@ class ArchiveCommand extends Command {
         }
 
         $zip->close();
+
+        $output->writeln('<info>Archive complete</info>');
     }
 
     /**
