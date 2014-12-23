@@ -32,10 +32,10 @@ class CreateCommand extends Command {
         $this->runSetupCommand($output);
         $this->fetchResources($input, $output);
 
-        if ( ! file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
+        if ( ! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php'))
         {
             file_put_contents(
-                'solutions'.DIRECTORY_SEPARATOR.$problem.'.php',
+                $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php',
                 sprintf(file_get_contents('config/template.php'), $problem)
             );
 
@@ -64,7 +64,7 @@ class CreateCommand extends Command {
         {
             foreach ($files as $file)
             {
-                $directory = sprintf('resources/%s', $problem);
+                $directory = sprintf('%s/%s', $this->getApplication()->config['resources_directory'], $problem);
                 $this->createDirectory($directory);
 
                 file_put_contents(

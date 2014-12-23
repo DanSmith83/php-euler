@@ -20,7 +20,9 @@ class RunCommand extends Command {
 
         if (file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
         {
-            $output->writeln(include 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php');
+            $output->writeln(
+                include $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php'
+            );
         }
     }
 
