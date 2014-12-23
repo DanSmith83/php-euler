@@ -10,7 +10,7 @@ class RunCommand extends Command {
     public function configure()
     {
         $this->setName('run')
-             ->setDescription('The problem number')
+             ->setDescription('Run the code for the given problem')
              ->addArgument('problem', InputArgument::REQUIRED);
     }
 
@@ -18,17 +18,10 @@ class RunCommand extends Command {
     {
         $problem = $input->getArgument('problem');
 
-        if ( ! is_dir('solutions'))
-        {
-            mkdir('solutions', 0755, true);
-        }
-
         if (file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
         {
             $output->writeln(include 'solutions'.DIRECTORY_SEPARATOR.$problem.'.php');
         }
-
-
     }
 
 }

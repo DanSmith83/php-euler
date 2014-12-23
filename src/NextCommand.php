@@ -2,45 +2,53 @@
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Euler\SetupCommand;
 
 class NextCommand extends Command {
-
-    public function __construct(SetupCommand $command, $name = null)
-    {
-        parent::__construct($name);
-
-        $this->command = $command;
-    }
 
     public function configure()
     {
         $this->setName('next')
-            ->setDescription('The problem number');
+             ->setDescription('Generate boilerplate for the next unsolved problem');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Woop');
+        $next = $this->getNext();
 
-        $files = scandir('solutions', SCANDIR_SORT_DESCENDING);
-        $file  = array_shift($files);
-        $bits  = explode('.', $file);
+        $output->writeln('<info>Next Problem</info>');
+        $this->getApplication()->find('create')
+                               ->run(new ArrayInput(['problem' => $next, 'command' => 'create']), $output);
+    }
 
-        $i = new ArrayInput(['problem' => $bits[0] + 1]);
-        $o = new BufferedOutput;
+    private function getNext()
+    {
+        $file = 1;
 
-        $code = $this->command->run($i, $o);
-
-        if ($code == 0)
+        if (is_dir('solutions'))
         {
-            $outputText = $o->fetch();
-            $output->writeln($outputText);
+            $latest_ctime = 0;
+            $latest_filename = '';
+
+            $d = dir('solutions');
+
+            while (false !== ($entry = $d->read()))
+            {
+                $filepath = "solutions/{$entry}";
+
+                if (is_file($filepath) && filectime($filepath) > $latest_ctime)
+                {
+                    $latest_ctime    = filectime($filepath);
+                    $latest_filename = $entry;
+                }
+            }
+
+            $bits = explode('.', $latest_filename);
+            $file = $bits[0]++;
         }
+
+        return $file;
     }
 
 }

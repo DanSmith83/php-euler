@@ -5,12 +5,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
-
+use Symfony\Component\Console\Input\ArrayInput;
+use Euler\DirectoryCreator;
 
 class CreateCommand extends Command {
 
-    private $baseUrl = 'https://projecteuler.net';
+    use DirectoryCreator;
 
     public function __construct(Client $client, $name = null)
     {
@@ -21,48 +21,16 @@ class CreateCommand extends Command {
 
     public function configure()
     {
-        $this->setName('setup')
-             ->setDescription('The problem number')
+        $this->setName('create')
+             ->setDescription('Create boilerplate for a given problem number')
              ->addArgument('problem', InputArgument::REQUIRED);
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');
-        $url     = sprintf('%s/problem=%s', $this->baseUrl, $problem);
-        $crawler = $this->client->request('GET', $url);
-        $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
-
-
-
-        if ($files)
-        {
-            foreach ($files as $file)
-            {
-                $dir = sprintf('resources/%s', $problem);
-
-                if ( ! is_dir($dir))
-                {
-                    mkdir($dir, 0755, true);
-                }
-
-                file_put_contents (
-                    $dir.DIRECTORY_SEPARATOR.$file[0],
-                    file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
-                );
-            }
-        }
-
-
-        if ( ! is_dir('functions'))
-        {
-            mkdir('functions', 0755, true);
-        }
-
-        if ( ! is_dir('solutions'))
-        {
-            mkdir('solutions', 0755, true);
-        }
+        $this->runSetupCommand($output);
+        $this->fetchResources($input, $output);
 
         if ( ! file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php'))
         {
@@ -75,5 +43,35 @@ class CreateCommand extends Command {
         }
     }
 
+    /**
+     * @param OutputInterface $output
+     * @throws \Exception
+     */
+    public function runSetupCommand(OutputInterface $output)
+    {
+        $i = new ArrayInput(['setup']);
+        $this->getApplication()->find('setup')->run($i, $output);
+    }
 
+    private function fetchResources(InputInterface $input, OutputInterface $output)
+    {
+        $problem = $input->getArgument('problem');
+        $url     = sprintf('%s/problem=%s', $this->getApplication()->config['base_url'], $problem);
+        $crawler = $this->client->request('GET', $url);
+        $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
+
+        if ($files)
+        {
+            foreach ($files as $file)
+            {
+                $directory = sprintf('resources/%s', $problem);
+                $this->createDirectory($directory);
+
+                file_put_contents(
+                    $directory . DIRECTORY_SEPARATOR . $file[0],
+                    file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
+                );
+            }
+        }
+    }
 }

@@ -5,12 +5,11 @@
 require 'vendor/autoload.php';
 
 $config = include 'config/config.php';
+$app    = new \Symfony\Component\Console\Application('PHP Euler', '0.1');
+$app->config = include 'config/config.php';
 
-
-$app = new \Symfony\Component\Console\Application('PHP Euler', '0.1');
-
+$app->add(new \Euler\SetupCommand);
 $app->add(new \Euler\CreateCommand(new \Goutte\Client));
-$app->add(new \Euler\RunCommand);
-$app->add(new \Euler\NextCommand(new \Euler\CreateCommand(new \Goutte\Client)));
+$app->add(new \Euler\NextCommand);
 $app->run();
 
