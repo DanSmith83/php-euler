@@ -11,5 +11,6 @@ $app->config = include 'config/config.php';
 $app->add(new \Euler\SetupCommand);
 $app->add(new \Euler\CreateCommand(new \Goutte\Client));
 $app->add(new \Euler\NextCommand);
+$app->add(new \Euler\ArchiveCommand);
 $app->run();
 
