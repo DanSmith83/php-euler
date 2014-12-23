@@ -19,23 +19,27 @@ class NextCommand extends Command {
 
         $output->writeln('<info>Next Problem</info>');
         $this->getApplication()->find('create')
-                               ->run(new ArrayInput(['problem' => $next, 'command' => 'create']), $output);
+                               ->run(new ArrayInput([
+                                   'problem' => $next,
+                                   'command' => 'create'
+                               ]), $output);
     }
 
     private function getNext()
     {
-        $file = 1;
+        $file      = 1;
+        $directory = $this->getApplication()->config['solutions_directory'];
 
-        if (is_dir('solutions'))
+        if (is_dir($directory))
         {
-            $latest_ctime = 0;
+            $latest_ctime    = 0;
             $latest_filename = '';
 
-            $d = dir('solutions');
+            $d = dir($directory);
 
             while (false !== ($entry = $d->read()))
             {
-                $filepath = "solutions/{$entry}";
+                $filepath = sprintf("%s/%s", $directory, $entry);
 
                 if (is_file($filepath) && filectime($filepath) > $latest_ctime)
                 {
@@ -44,11 +48,14 @@ class NextCommand extends Command {
                 }
             }
 
-            $bits = explode('.', $latest_filename);
-            $file = $bits[0]++;
+            if ($latest_filename)
+            {
+                $bits = explode('.', $latest_filename);
+                $file = $bits[0];
+                $file ++;
+            }
         }
 
         return $file;
     }
-
 }
