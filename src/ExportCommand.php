@@ -38,6 +38,7 @@ class ExportCommand extends Command {
         $this->zipDirectory($zip, $this->getApplication()->config['functions_directory']);
         $this->zipDirectory($zip, $this->getApplication()->config['resources_directory']);
         $this->zipDirectory($zip, $this->getApplication()->config['solutions_directory']);
+        $this->zipDirectory($zip, $this->getApplication()->config['problems_directory']);
 
         if ( ! $zip->status == \ZipArchive::ER_OK)
         {

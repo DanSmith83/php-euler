@@ -101,9 +101,5 @@ class CreateCommand extends Command {
                 $text
             );
         }
-
-        $formatter = $this->getHelper('formatter');
-        $block     = $formatter->formatBlock($text, 'question');
-        $output->writeln($block);
     }
 }
