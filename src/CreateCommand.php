@@ -102,6 +102,8 @@ class CreateCommand extends Command {
             );
         }
 
-        $output->writeln(sprintf('<question>%s</question>', implode(PHP_EOL, $text)));
+        $formatter = $this->getHelper('formatter');
+        $block     = $formatter->formatBlock($text, 'question');
+        $output->writeln($block);
     }
 }
