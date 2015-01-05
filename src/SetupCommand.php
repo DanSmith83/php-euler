@@ -6,16 +6,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Euler\DirectoryCreator;
 
+/**
+ * Class SetupCommand
+ * @package Euler
+ */
 class SetupCommand extends Command {
 
     use DirectoryCreator;
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setName('setup')
-             ->setDescription('The problem number');
+             ->setDescription('Create configuration');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $config         = $this->getApplication()->config;;
