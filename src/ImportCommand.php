@@ -9,8 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class ImportCommand
  * @package Euler
  */
-class ImportCommand extends Command {
-
+class ImportCommand extends Command
+{
     /**
      *
      */
@@ -22,42 +22,35 @@ class ImportCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
 
         $tempFile = 'tmpfile.zip';
 
-        if ( ! copy($input->getArgument('url'), $tempFile))
-        {
-
+        if (! copy($input->getArgument('url'), $tempFile)) {
         }
 
         $res = $zip->open($tempFile);
 
-        if ($res !== TRUE)
-        {
+        if ($res !== true) {
             die('balls');
         }
 
         $output->writeln('<info>'.$tempFile.'</info>');
 
-
-        if ($zip->locateName($this->getApplication()->config['functions_directory']))
-        {
+        if ($zip->locateName($this->getApplication()->config['functions_directory'])) {
             $output->writeln('<info>Functions directory found</info>');
         }
 
-        if ($zip->locateName($this->getApplication()->config['resources_directory']))
-        {
+        if ($zip->locateName($this->getApplication()->config['resources_directory'])) {
             $output->writeln('<info>Resources directory found</info>');
         }
 
-        if ($zip->locateName($this->getApplication()->config['solutions_directory']))
-        {
+        if ($zip->locateName($this->getApplication()->config['solutions_directory'])) {
             $output->writeln('<info>Solutions directory found</info>');
         }
 

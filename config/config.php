@@ -1,6 +1,6 @@
 <?php
 
-return array (
+return array(
   'base_url' => 'https://projecteuler.net',
   'functions_directory' => 'functions',
   'resources_directory' => 'resources',

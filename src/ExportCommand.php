@@ -8,8 +8,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class ExportCommand
  * @package Euler
  */
-class ExportCommand extends Command {
-
+class ExportCommand extends Command
+{
     /**
      *
      */
@@ -20,19 +20,17 @@ class ExportCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $file  = 'archive.zip';
-        $zip   = new \ZipArchive;
+        $zip   = new \ZipArchive();
 
         $zip->open($file, \ZipArchive::CREATE);
 
-        if ( ! $zip->open($file, \ZipArchive::OVERWRITE))
-        {
-
+        if (! $zip->open($file, \ZipArchive::OVERWRITE)) {
         }
 
         $this->zipDirectory($zip, $this->getApplication()->config['functions_directory']);
@@ -40,9 +38,7 @@ class ExportCommand extends Command {
         $this->zipDirectory($zip, $this->getApplication()->config['solutions_directory']);
         $this->zipDirectory($zip, $this->getApplication()->config['problems_directory']);
 
-        if ( ! $zip->status == \ZipArchive::ER_OK)
-        {
-
+        if (! $zip->status == \ZipArchive::ER_OK) {
         }
 
         $zip->close();
@@ -57,10 +53,8 @@ class ExportCommand extends Command {
      */
     public function zipDirectory($zip, $directory)
     {
-        if (is_dir($directory))
-        {
-            foreach (glob($directory . '/*') as $file)
-            {
+        if (is_dir($directory)) {
+            foreach (glob($directory.'/*') as $file) {
                 $zip->addFile($file, sprintf('%s/%s', $directory, $file));
             }
         }

@@ -6,19 +6,18 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
-use Euler\DirectoryCreator;
 
 /**
  * Class CreateCommand
  * @package Euler
  */
-class CreateCommand extends Command {
-
+class CreateCommand extends Command
+{
     use DirectoryCreator;
 
     /**
      * @param Client $client
-     * @param null $name
+     * @param null   $name
      */
     public function __construct(Client $client, $name = null)
     {
@@ -38,7 +37,7 @@ class CreateCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -47,8 +46,7 @@ class CreateCommand extends Command {
         //$this->runSetupCommand($output);
         $this->fetchResources($input, $output);
 
-        if ( ! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php'))
-        {
+        if (! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php')) {
             file_put_contents(
                 $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php',
                 sprintf(file_get_contents('config/template.php'), $problem)
@@ -59,7 +57,7 @@ class CreateCommand extends Command {
     }
 
     /**
-     * @param OutputInterface $output
+     * @param  OutputInterface $output
      * @throws \Exception
      */
     public function runSetupCommand(OutputInterface $output)
@@ -69,7 +67,7 @@ class CreateCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     private function fetchResources(InputInterface $input, OutputInterface $output)
@@ -80,24 +78,21 @@ class CreateCommand extends Command {
         $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
         $text    = $crawler->filter('div.problem_content')->extract(['_text']);
 
-        if ($files)
-        {
+        if ($files) {
             $directory = sprintf('%s/%s', $this->getApplication()->config['resources_directory'], $problem);
             $this->createDirectory($directory);
 
-            foreach ($files as $file)
-            {
+            foreach ($files as $file) {
                 file_put_contents(
-                    $directory . DIRECTORY_SEPARATOR . $file[0],
+                    $directory.DIRECTORY_SEPARATOR.$file[0],
                     file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
                 );
             }
         }
 
-        if ( ! file_exists(sprintf('%s/%s.php',$this->getApplication()->config['problems_directory'], $problem)))
-        {
+        if (! file_exists(sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem))) {
             file_put_contents(
-                sprintf('%s/%s.php',$this->getApplication()->config['problems_directory'], $problem),
+                sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem),
                 $text
             );
         }

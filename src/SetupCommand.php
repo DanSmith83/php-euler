@@ -4,14 +4,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Euler\DirectoryCreator;
 
 /**
  * Class SetupCommand
  * @package Euler
  */
-class SetupCommand extends Command {
-
+class SetupCommand extends Command
+{
     use DirectoryCreator;
 
     /**
@@ -24,18 +23,16 @@ class SetupCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $config         = $this->getApplication()->config;;
+        $config         = $this->getApplication()->config;
         $questionHelper = $this->getHelper('question');
 
-        foreach ($this->getApplication()->config as $key => $val)
-        {
-            if ( ! strpos($key, '_directory'))
-            {
+        foreach ($this->getApplication()->config as $key => $val) {
+            if (! strpos($key, '_directory')) {
                 continue;
             }
 

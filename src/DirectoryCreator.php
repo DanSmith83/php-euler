@@ -4,15 +4,14 @@
  * Class DirectoryCreator
  * @package Euler
  */
-Trait DirectoryCreator {
-
+trait DirectoryCreator
+{
     /**
      * @param $directory
      */
     private function createDirectory($directory)
     {
-        if ( ! $this->directoryExists($directory))
-        {
+        if (! $this->directoryExists($directory)) {
             mkdir($directory, 0755, true);
         }
     }

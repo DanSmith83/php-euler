@@ -9,8 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class NextCommand
  * @package Euler
  */
-class NextCommand extends Command {
-
+class NextCommand extends Command
+{
     /**
      *
      */
@@ -21,8 +21,8 @@ class NextCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -33,7 +33,7 @@ class NextCommand extends Command {
         $this->getApplication()->find('create')
                                ->run(new ArrayInput([
                                    'problem' => $next,
-                                   'command' => 'create'
+                                   'command' => 'create',
                                ]), $output);
     }
 
@@ -45,26 +45,22 @@ class NextCommand extends Command {
         $file      = 1;
         $directory = $this->getApplication()->config['solutions_directory'];
 
-        if (is_dir($directory))
-        {
+        if (is_dir($directory)) {
             $latest_ctime    = 0;
             $latest_filename = '';
 
             $d = dir($directory);
 
-            while (false !== ($entry = $d->read()))
-            {
+            while (false !== ($entry = $d->read())) {
                 $filepath = sprintf("%s/%s", $directory, $entry);
 
-                if (is_file($filepath) && filectime($filepath) > $latest_ctime)
-                {
+                if (is_file($filepath) && filectime($filepath) > $latest_ctime) {
                     $latest_ctime    = filectime($filepath);
                     $latest_filename = $entry;
                 }
             }
 
-            if ($latest_filename)
-            {
+            if ($latest_filename) {
                 $bits = explode('.', $latest_filename);
                 $file = $bits[0];
                 $file ++;

@@ -9,8 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class RunCommand
  * @package Euler
  */
-class ReadCommand extends Command {
-
+class ReadCommand extends Command
+{
     /**
      *
      */
@@ -22,7 +22,7 @@ class ReadCommand extends Command {
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -30,8 +30,7 @@ class ReadCommand extends Command {
         $problem   = $input->getArgument('problem');
         $directory = $this->getApplication()->config['problems_directory'];
 
-        if (file_exists($directory.DIRECTORY_SEPARATOR.$problem.'.php'))
-        {
+        if (file_exists($directory.DIRECTORY_SEPARATOR.$problem.'.php')) {
             $formatter = $this->getHelper('formatter');
             $block     = $formatter->formatBlock(file_get_contents($directory.DIRECTORY_SEPARATOR.$problem.'.php'), 'question');
 
