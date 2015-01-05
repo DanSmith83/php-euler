@@ -5,8 +5,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class ImportCommand
+ * @package Euler
+ */
 class ImportCommand extends Command {
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setName('import')
@@ -14,6 +21,10 @@ class ImportCommand extends Command {
             ->addArgument('url', InputArgument::REQUIRED);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $zip = new \ZipArchive;

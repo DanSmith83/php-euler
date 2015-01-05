@@ -5,8 +5,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class RunCommand
+ * @package Euler
+ */
 class RunCommand extends Command {
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setName('run')
@@ -14,6 +21,10 @@ class RunCommand extends Command {
              ->addArgument('problem', InputArgument::REQUIRED);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');

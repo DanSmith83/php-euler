@@ -8,10 +8,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Euler\DirectoryCreator;
 
+/**
+ * Class CreateCommand
+ * @package Euler
+ */
 class CreateCommand extends Command {
 
     use DirectoryCreator;
 
+    /**
+     * @param Client $client
+     * @param null $name
+     */
     public function __construct(Client $client, $name = null)
     {
         parent::__construct($name);
@@ -19,6 +27,9 @@ class CreateCommand extends Command {
         $this->client = $client;
     }
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setName('create')
@@ -26,6 +37,10 @@ class CreateCommand extends Command {
              ->addArgument('problem', InputArgument::REQUIRED);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');
@@ -53,6 +68,10 @@ class CreateCommand extends Command {
         $this->getApplication()->find('setup')->run($i, $output);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     private function fetchResources(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');

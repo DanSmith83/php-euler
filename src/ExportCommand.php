@@ -4,14 +4,25 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class ExportCommand
+ * @package Euler
+ */
 class ExportCommand extends Command {
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setName('archive')
              ->setDescription('Export files as zip');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $file  = 'archive.zip';
