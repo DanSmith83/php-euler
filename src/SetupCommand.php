@@ -18,17 +18,29 @@ class SetupCommand extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $config         = [];
         $questionHelper = $this->getHelper('question');
 
         foreach ($this->getApplication()->config as $key => $val)
         {
-            $question = new Question(sprintf('<question>%s</question>', $key), $val);
+            $question = new Question(
+                sprintf('<question>%s:</question>', ucfirst(str_replace('_', ' ', $key))), $val
+            );
+
             $response = $questionHelper->ask($input, $output, $question);
             $output->writeln(sprintf('<info>%s</info>', $response));
+            $config[$key] = $response;
         }
 
-        $this->createDirectory($this->getApplication()->config['functions_directory']);
-        $this->createDirectory($this->getApplication()->config['resources_directory']);
-        $this->createDirectory($this->getApplication()->config['solutions_directory']);
+        file_put_contents(
+            'config/config.php',
+            sprintf(
+                '<?php'.PHP_EOL.PHP_EOL.'return %s;', var_export($config, true)
+            )
+        );
+
+        $this->createDirectory($config['functions_directory']);
+        $this->createDirectory($config['resources_directory']);
+        $this->createDirectory($config['solutions_directory']);
     }
 }
