@@ -17,8 +17,8 @@ class ImportCommand extends Command
     public function configure()
     {
         $this->setName('import')
-            ->setDescription('Import zip file')
-            ->addArgument('url', InputArgument::REQUIRED);
+             ->setDescription('Import zip file')
+             ->addArgument('url', InputArgument::REQUIRED);
     }
 
     /**
@@ -27,37 +27,59 @@ class ImportCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $zip = new \ZipArchive();
-
         $tempFile = 'tmpfile.zip';
 
-        if (! copy($input->getArgument('url'), $tempFile)) {
-        }
+        try
+        {
+            $this->fetch($input->getArgument('url'), $tempFile);
+            $this->extract($tempFile);
+            $output->writeln('<info>Import complete</info>');
 
+        }
+        catch (Exception $e)
+        {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+        }
+    }
+
+    private function extract($tempFile)
+    {
+        $zip = new \ZipArchive;
         $res = $zip->open($tempFile);
 
         if ($res !== true) {
-            die('balls');
+            throw new \Exception('Could not open archive.');
         }
 
-        $output->writeln('<info>'.$tempFile.'</info>');
+        if (! $zip->extractTo('./'))
+        {
+            throw new \Exception('Could not extract archive');
+        }
 
+        unlink($tempFile);
+    }
+
+    private function fetch($url, $tempFile)
+    {
+        $zip = new \ZipArchive;
+
+        if (! copy($url, $tempFile)) {
+
+            throw new \Exception('Remote file not found.');
+        }
+    }
+
+    private function extractDirectory()
+    {
+        /*
         if ($zip->locateName($this->getApplication()->config['functions_directory'])) {
-            $output->writeln('<info>Functions directory found</info>');
         }
 
         if ($zip->locateName($this->getApplication()->config['resources_directory'])) {
-            $output->writeln('<info>Resources directory found</info>');
         }
 
         if ($zip->locateName($this->getApplication()->config['solutions_directory'])) {
-            $output->writeln('<info>Solutions directory found</info>');
         }
-
-        $zip->extractTo('./');
-
-        $output->writeln('<info>Import complete</info>');
-
-        unlink($tempFile);
+        */
     }
 }

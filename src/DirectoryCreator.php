@@ -24,4 +24,25 @@ trait DirectoryCreator
     {
         return is_dir($directory);
     }
+
+    private function getLatestFile($directory)
+    {
+        if (is_dir($directory)) {
+            $latest_ctime    = 0;
+            $latest_filename = '';
+
+            $d = dir($directory);
+
+            while (false !== ($entry = $d->read())) {
+                $filepath = sprintf("%s/%s", $directory, $entry);
+
+                if (is_file($filepath) && filectime($filepath) > $latest_ctime) {
+                    $latest_ctime    = filectime($filepath);
+                    $latestFilename = $entry;
+                }
+            }
+        }
+
+        return $latestFilename;
+    }
 }

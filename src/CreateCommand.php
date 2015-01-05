@@ -93,7 +93,7 @@ class CreateCommand extends Command
         if (! file_exists(sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem))) {
             file_put_contents(
                 sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem),
-                $text
+                trim($text[0])
             );
         }
     }

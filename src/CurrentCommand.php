@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\ArrayInput;
  */
 class CurrentCommand extends Command
 {
+    use DirectoryCreator;
+
     /**
      *
      */
@@ -26,27 +28,10 @@ class CurrentCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $file      = 1;
         $directory = $this->getApplication()->config['problems_directory'];
 
-        if (is_dir($directory)) {
-            $latest_ctime    = 0;
-            $latest_filename = '';
-
-            $d = dir($directory);
-
-            while (false !== ($entry = $d->read())) {
-                $filepath = sprintf("%s/%s", $directory, $entry);
-
-                if (is_file($filepath) && filectime($filepath) > $latest_ctime) {
-                    $latest_ctime    = filectime($filepath);
-                    $latest_filename = $entry;
-                }
-            }
-        }
-
-        if ($latest_filename) {
-            $bits = explode('.', $latest_filename);
+        if ($latestFilename = $this->getLatestFile($directory)) {
+            $bits = explode('.', $latestFilename);
             $file = $bits[0];
 
             $this->getApplication()->find('read')
