@@ -12,4 +12,5 @@ $app->add(new \Euler\CreateCommand(new \Goutte\Client));
 $app->add(new \Euler\NextCommand);
 $app->add(new \Euler\ImportCommand);
 $app->add(new \Euler\ExportCommand);
+$app->add(new \Euler\RunCommand);
 $app->run();
