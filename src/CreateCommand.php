@@ -44,7 +44,7 @@ class CreateCommand extends Command {
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');
-        $this->runSetupCommand($output);
+        //$this->runSetupCommand($output);
         $this->fetchResources($input, $output);
 
         if ( ! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php'))
@@ -78,19 +78,30 @@ class CreateCommand extends Command {
         $url     = sprintf('%s/problem=%s', $this->getApplication()->config['base_url'], $problem);
         $crawler = $this->client->request('GET', $url);
         $files   = $crawler->filter('div.problem_content > p > a')->extract(['_text', 'href']);
+        $text    = $crawler->filter('div.problem_content')->extract(['_text']);
 
         if ($files)
         {
+            $directory = sprintf('%s/%s', $this->getApplication()->config['resources_directory'], $problem);
+            $this->createDirectory($directory);
+
             foreach ($files as $file)
             {
-                $directory = sprintf('%s/%s', $this->getApplication()->config['resources_directory'], $problem);
-                $this->createDirectory($directory);
-
                 file_put_contents(
                     $directory . DIRECTORY_SEPARATOR . $file[0],
                     file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
                 );
             }
         }
+
+        if ( ! file_exists(sprintf('%s/%s.php',$this->getApplication()->config['problems_directory'], $problem)))
+        {
+            file_put_contents(
+                sprintf('%s/%s.php',$this->getApplication()->config['problems_directory'], $problem),
+                $text
+            );
+        }
+
+        $output->writeln(sprintf('<question>%s</question>', implode(PHP_EOL, $text)));
     }
 }
