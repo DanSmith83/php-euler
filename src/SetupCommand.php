@@ -18,11 +18,16 @@ class SetupCommand extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $config         = [];
+        $config         = $this->getApplication()->config;;
         $questionHelper = $this->getHelper('question');
 
         foreach ($this->getApplication()->config as $key => $val)
         {
+            if ( ! strpos($key, '_directory'))
+            {
+                continue;
+            }
+
             $question = new Question(
                 sprintf('<question>%s:</question>', ucfirst(str_replace('_', ' ', $key))), $val
             );
