@@ -29,7 +29,7 @@ trait DirectoryCreator
     {
         if (is_dir($directory)) {
             $latest_ctime    = 0;
-            $latest_filename = '';
+            $latestFilename = '';
 
             $d = dir($directory);
 
@@ -37,12 +37,12 @@ trait DirectoryCreator
                 $filepath = sprintf("%s/%s", $directory, $entry);
 
                 if (is_file($filepath) && filectime($filepath) > $latest_ctime) {
-                    $latest_ctime    = filectime($filepath);
+                    $latest_ctime   = filectime($filepath);
                     $latestFilename = $entry;
                 }
             }
         }
 
-        return $latestFilename;
+        return $latestFilename ?: false;
     }
 }

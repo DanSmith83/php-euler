@@ -37,6 +37,12 @@ class NextCommand extends Command
                                    'problem' => $next,
                                    'command' => 'create',
                                ]), $output);
+
+        $this->getApplication()->find('read')
+             ->run(new ArrayInput([
+                 'problem' => $next,
+                 'command' => 'read',
+             ]), $output);
     }
 
     /**
