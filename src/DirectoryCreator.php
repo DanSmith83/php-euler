@@ -9,10 +9,10 @@ trait DirectoryCreator
     /**
      * @param $directory
      */
-    private function createDirectory($directory)
+    private function createDirectory($directory, $permissions = 0755)
     {
         if (! $this->directoryExists($directory)) {
-            mkdir($directory, 0755, true);
+            mkdir($directory, $permissions, true);
         }
     }
 
