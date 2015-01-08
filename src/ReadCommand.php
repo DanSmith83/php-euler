@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ReadCommand extends Command
 {
+    use DirectoryCreator;
+
     /**
      *
      */
@@ -27,15 +29,13 @@ class ReadCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $problem   = $input->getArgument('problem');
+        $problem = $input->getArgument('problem');
 
-        if (file_exists(sprintf(
-            '%s%s%s%sproblem.php',
-            $this->getApplication()->config['problems_directory'],
-            DIRECTORY_SEPARATOR,
-            $problem,
-            DIRECTORY_SEPARATOR
-        )))
+        if (file_exists($this->join([
+                    $this->getApplication()->config['problems_directory'],
+                    $problem,
+                    'problem.php'
+            ])))
         {
             $formatter = $this->getHelper('formatter');
             $block     = $formatter->formatBlock(file_get_contents(sprintf(

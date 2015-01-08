@@ -18,11 +18,16 @@ trait DirectoryCreator
         }
     }
 
-    private function createFile($path, $content)
+    private function createFile($path, $content, $overwrite = false)
     {
-        if ( ! file_exists($path)) {
+        if ( ! file_exists($path) || $overwrite === true) {
             file_put_contents($path, $content);
         }
+    }
+
+    private function join($path)
+    {
+        return implode(DIRECTORY_SEPARATOR, $path);
     }
 
     /**
