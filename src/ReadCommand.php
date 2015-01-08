@@ -28,11 +28,23 @@ class ReadCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem   = $input->getArgument('problem');
-        $directory = $this->getApplication()->config['problems_directory'];
 
-        if (file_exists($directory.DIRECTORY_SEPARATOR.$problem.'.php')) {
+        if (file_exists(sprintf(
+            '%s%s%s%sproblem.php',
+            $this->getApplication()->config['problems_directory'],
+            DIRECTORY_SEPARATOR,
+            $problem,
+            DIRECTORY_SEPARATOR
+        )))
+        {
             $formatter = $this->getHelper('formatter');
-            $block     = $formatter->formatBlock(file_get_contents($directory.DIRECTORY_SEPARATOR.$problem.'.php'), 'question');
+            $block     = $formatter->formatBlock(file_get_contents(sprintf(
+                '%s%s%s%sproblem.php',
+                $this->getApplication()->config['problems_directory'],
+                DIRECTORY_SEPARATOR,
+                $problem,
+                DIRECTORY_SEPARATOR
+            )), 'question');
 
             $output->writeln($block);
         }

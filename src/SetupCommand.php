@@ -52,9 +52,7 @@ class SetupCommand extends Command
             )
         );
 
-        $this->createDirectory($config['functions_directory']);
-        $this->createDirectory($config['resources_directory']);
-        $this->createDirectory($config['solutions_directory']);
         $this->createDirectory($config['problems_directory']);
+        $this->createDirectory($config['shared_directory']);
     }
 }

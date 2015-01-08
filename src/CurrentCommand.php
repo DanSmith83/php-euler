@@ -28,17 +28,14 @@ class CurrentCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $directory = $this->getApplication()->config['problems_directory'];
-
-        if ($latestFilename = $this->getLatestFile($directory)) {
-            $bits = explode('.', $latestFilename);
-            $file = $bits[0];
-
+        if ($current = $this->getLatestDirectory($this->getApplication()->config['problems_directory'])) {
             $this->getApplication()->find('read')
                  ->run(new ArrayInput([
-                     'problem' => $file,
+                     'problem' => $current,
                      'command' => 'read',
                  ]), $output);
+        } else {
+            $output->writeln('<error>No problems found</error>');
         }
     }
 }

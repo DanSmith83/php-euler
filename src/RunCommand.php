@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RunCommand extends Command
 {
+    use DirectoryCreator;
+
     /**
      *
      */
@@ -29,12 +31,12 @@ class RunCommand extends Command
     {
         $problem = $input->getArgument('problem');
 
-        if (file_exists('solutions'.DIRECTORY_SEPARATOR.$problem.'.php')) {
+        if (file_exists($this->getFile($problem, 'solution'))) {
             try {
                 $output->writeln(
                     sprintf(
                         '<info>%s</info>',
-                        include $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php'
+                        include $this->getFile($problem, 'solution')
                     )
                 );
             } catch (\Exception $e) {

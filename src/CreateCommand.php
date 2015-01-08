@@ -43,9 +43,18 @@ class CreateCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $problem = $input->getArgument('problem');
+
+        $this->createDirectory(
+            sprintf('%s%s%s',
+                $this->getApplication()->config['problems_directory'],
+                DIRECTORY_SEPARATOR,
+                $problem
+            ));
+
         //$this->runSetupCommand($output);
         $this->fetchResources($input, $output);
 
+        /*
         if (! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php')) {
             file_put_contents(
                 $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php',
@@ -54,6 +63,7 @@ class CreateCommand extends Command
 
             $output->writeln(sprintf('<info>Added file %s.php</info>', $problem));
         }
+        */
     }
 
     /**
@@ -79,21 +89,45 @@ class CreateCommand extends Command
         $text    = $crawler->filter('div.problem_content')->extract(['_text']);
 
         if ($files) {
-            $directory = sprintf('%s/%s', $this->getApplication()->config['resources_directory'], $problem);
-            $this->createDirectory($directory);
+
+            $directory = sprintf('%s%s%s',
+                $this->getApplication()->config['problems_directory'],
+                DIRECTORY_SEPARATOR,
+                $problem);
 
             foreach ($files as $file) {
                 file_put_contents(
                     $directory.DIRECTORY_SEPARATOR.$file[0],
-                    file_get_contents(sprintf('%s/%s', $this->baseUrl, $file[1]))
+                    file_get_contents(sprintf('%s%s%s', $this->baseUrl, DIRECTORY_SEPARATOR, $file[1]))
                 );
             }
         }
 
-        if (! file_exists(sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem))) {
+        if (! file_exists(sprintf('%s%s%s%sproblem.php', $this->getApplication()->config['problems_directory'],
+                DIRECTORY_SEPARATOR,
+                $problem,
+                DIRECTORY_SEPARATOR)))
+        {
             file_put_contents(
-                sprintf('%s/%s.php', $this->getApplication()->config['problems_directory'], $problem),
+                sprintf('%s%s%s%sproblem.php', $this->getApplication()->config['problems_directory'],
+                    DIRECTORY_SEPARATOR,
+                    $problem,
+                    DIRECTORY_SEPARATOR),
                 trim($text[0])
+            );
+        }
+
+        if (! file_exists(sprintf('%s%s%s%ssolution.php', $this->getApplication()->config['problems_directory'],
+            DIRECTORY_SEPARATOR,
+            $problem,
+            DIRECTORY_SEPARATOR)))
+        {
+            file_put_contents(
+                sprintf('%s%s%s%ssolution.php', $this->getApplication()->config['problems_directory'],
+                    DIRECTORY_SEPARATOR,
+                    $problem,
+                    DIRECTORY_SEPARATOR),
+                sprintf(file_get_contents('config/template.php'), $problem)
             );
         }
     }

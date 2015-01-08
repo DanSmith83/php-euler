@@ -1,8 +1,6 @@
 .idea
 *.zip
 _MACOSX
-functions
 problems
-resources
-solutions
+shared
 vendor

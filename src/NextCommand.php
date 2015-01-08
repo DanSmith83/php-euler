@@ -32,33 +32,30 @@ class NextCommand extends Command
         $next = $this->getNext();
 
         $output->writeln('<info>Next Problem</info>');
-        $this->getApplication()->find('create')
-                               ->run(new ArrayInput([
-                                   'problem' => $next,
-                                   'command' => 'create',
-                               ]), $output);
 
-        $this->getApplication()->find('read')
-             ->run(new ArrayInput([
-                 'problem' => $next,
-                 'command' => 'read',
-             ]), $output);
+        $this->runCommand('create', ['problem' => $next], $output);
+        $this->runCommand('read', ['problem' => $next], $output);
     }
 
     /**
      * @return int
      */
-    private function getNext()
+    private function getCurrent()
     {
-        $file      = 1;
-        $directory = $this->getApplication()->config['problems_directory'];
-
-        if ($latestFilename = $this->getLatestFile($directory)) {
-            $bits = explode('.', $latestFilename);
-            $file = $bits[0];
-            $file ++;
+        if ($latest = $this->getLatestDirectory($this->getApplication()->config['problems_directory'])) {
+            return $latest;
         }
 
-        return $file;
+        return false;
+    }
+
+    private function getNext()
+    {
+        if ($current = $this->getCurrent() !== false)
+        {
+            return $current + 1;
+        }
+
+        return 1;
     }
 }
