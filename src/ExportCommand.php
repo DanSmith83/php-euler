@@ -33,10 +33,8 @@ class ExportCommand extends Command
         if (! $zip->open($file, \ZipArchive::OVERWRITE)) {
         }
 
-        $this->zipDirectory($zip, $this->getApplication()->config['functions_directory']);
-        $this->zipDirectory($zip, $this->getApplication()->config['resources_directory']);
-        $this->zipDirectory($zip, $this->getApplication()->config['solutions_directory']);
         $this->zipDirectory($zip, $this->getApplication()->config['problems_directory']);
+        $this->zipDirectory($zip, $this->getApplication()->config['shared_directory']);
 
         if (! $zip->status == \ZipArchive::ER_OK) {
         }
