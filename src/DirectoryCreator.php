@@ -18,6 +18,13 @@ trait DirectoryCreator
         }
     }
 
+    private function createFile($path, $content)
+    {
+        if ( ! file_exists($path)) {
+            file_put_contents($path, $content);
+        }
+    }
+
     /**
      * @param $directory
      * @return bool

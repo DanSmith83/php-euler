@@ -84,25 +84,18 @@ class CreateCommand extends Command
                 $problem);
 
             foreach ($files as $file) {
-                file_put_contents(
+                $this->createFile(
                     $directory.DIRECTORY_SEPARATOR.$file[0],
                     file_get_contents(sprintf('%s%s%s', $this->baseUrl, DIRECTORY_SEPARATOR, $file[1]))
                 );
             }
         }
 
-        if (! file_exists($this->getFile($problem, 'problem')))
-        {
-            file_put_contents($this->getFile($problem, 'problem'),
-                trim($text[0])
-            );
-        }
+        $this->createFile($this->getFile($problem, 'problem'), trim($text[0]));
 
-        if (! file_exists($this->getFile($problem, 'solution')))
-        {
-            file_put_contents($this->getFile($problem, 'solution'),
-                sprintf(file_get_contents('config/template.php'), $problem)
-            );
-        }
+        $this->createFile(
+            $this->getFile($problem, 'solution'),
+            sprintf(file_get_contents('config/template.php'), $problem)
+        );
     }
 }
