@@ -25,8 +25,8 @@ class ExportCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $file  = 'archive.zip';
-        $zip   = new \ZipArchive();
+        $file = 'archive.zip';
+        $zip  = new \ZipArchive();
 
         $zip->open($file, \ZipArchive::CREATE);
 

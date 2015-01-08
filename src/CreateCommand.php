@@ -51,19 +51,7 @@ class CreateCommand extends Command
                 $problem
             ));
 
-        //$this->runSetupCommand($output);
         $this->fetchResources($input, $output);
-
-        /*
-        if (! file_exists($this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php')) {
-            file_put_contents(
-                $this->getApplication()->config['solutions_directory'].DIRECTORY_SEPARATOR.$problem.'.php',
-                sprintf(file_get_contents('config/template.php'), $problem)
-            );
-
-            $output->writeln(sprintf('<info>Added file %s.php</info>', $problem));
-        }
-        */
     }
 
     /**
@@ -103,30 +91,16 @@ class CreateCommand extends Command
             }
         }
 
-        if (! file_exists(sprintf('%s%s%s%sproblem.php', $this->getApplication()->config['problems_directory'],
-                DIRECTORY_SEPARATOR,
-                $problem,
-                DIRECTORY_SEPARATOR)))
+        if (! file_exists($this->getFile($problem, 'problem')))
         {
-            file_put_contents(
-                sprintf('%s%s%s%sproblem.php', $this->getApplication()->config['problems_directory'],
-                    DIRECTORY_SEPARATOR,
-                    $problem,
-                    DIRECTORY_SEPARATOR),
+            file_put_contents($this->getFile($problem, 'problem'),
                 trim($text[0])
             );
         }
 
-        if (! file_exists(sprintf('%s%s%s%ssolution.php', $this->getApplication()->config['problems_directory'],
-            DIRECTORY_SEPARATOR,
-            $problem,
-            DIRECTORY_SEPARATOR)))
+        if (! file_exists($this->getFile($problem, 'solution')))
         {
-            file_put_contents(
-                sprintf('%s%s%s%ssolution.php', $this->getApplication()->config['problems_directory'],
-                    DIRECTORY_SEPARATOR,
-                    $problem,
-                    DIRECTORY_SEPARATOR),
+            file_put_contents($this->getFile($problem, 'solution'),
                 sprintf(file_get_contents('config/template.php'), $problem)
             );
         }

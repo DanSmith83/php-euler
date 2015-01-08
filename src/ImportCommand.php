@@ -12,6 +12,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ImportCommand extends Command
 {
     /**
+     * @param Client $client
+     * @param null   $name
+     */
+    public function __construct(\ZipArchive $zip)
+    {
+        parent::__construct();
+
+        $this->zip = $zip;
+    }
+    /**
      *
      */
     public function configure()
@@ -44,14 +54,13 @@ class ImportCommand extends Command
 
     private function extract($tempFile)
     {
-        $zip = new \ZipArchive;
-        $res = $zip->open($tempFile);
+        $res = $this->zip->open($tempFile);
 
         if ($res !== true) {
             throw new \Exception('Could not open archive.');
         }
 
-        if (! $zip->extractTo('./'))
+        if (! $this->zip->extractTo('./'))
         {
             throw new \Exception('Could not extract archive');
         }
@@ -61,25 +70,9 @@ class ImportCommand extends Command
 
     private function fetch($url, $tempFile)
     {
-        $zip = new \ZipArchive;
-
         if (! copy($url, $tempFile)) {
 
             throw new \Exception('Remote file not found.');
         }
-    }
-
-    private function extractDirectory()
-    {
-        /*
-        if ($zip->locateName($this->getApplication()->config['functions_directory'])) {
-        }
-
-        if ($zip->locateName($this->getApplication()->config['resources_directory'])) {
-        }
-
-        if ($zip->locateName($this->getApplication()->config['solutions_directory'])) {
-        }
-        */
     }
 }
